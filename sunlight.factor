@@ -27,8 +27,6 @@ TUPLE: legislator title firstname middlename lastname name_suffix nickname party
   in_office gender phone fax website webform email congress_office bioguide_id votesmart_id
   fec_id govtrack_id crp_id eventful_id sunlight_old_id congresspedia_url twitter_id youtube_url ;
 
-! legislator tuple legislator-fields define-tuple-class
-
 : <legislator> ( hash -- leg )
   legislator slot-names [ over at ] map { legislator } prepend
   >tuple nip ;
