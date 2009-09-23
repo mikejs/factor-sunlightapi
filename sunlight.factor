@@ -4,6 +4,12 @@ USING: kernel json.reader http.client urls locals accessors assocs strings conti
  math.parser make classes.tuple arrays combinators ;
 IN: sunlight
 
+TUPLE: legislator title firstname middlename lastname name_suffix nickname party state district
+  in_office gender phone fax website webform email congress_office bioguide_id votesmart_id
+  fec_id govtrack_id crp_id eventful_id sunlight_old_id congresspedia_url twitter_id youtube_url ;
+
+TUPLE: district state number ;
+
 <PRIVATE
 
 CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
@@ -21,35 +27,30 @@ CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
 : slot-names ( class -- l )
   all-slots [ name>> ] map ;
 
+: <legislator> ( hash -- leg )
+  legislator slot-names [ over at ] map { legislator } prepend
+  >tuple nip ;
+
+: <district> ( hash -- district )
+  district slot-names [ over at ] map { district } prepend
+  >tuple nip ;
+
+: extract-legislators ( hash -- seq )
+  "legislators" swap at [ "legislator" swap at <legislator> ] map ;
+
 : 1assoc ( key value -- assoc )
   [ 1array ] bi@ zip ;
 
 PRIVATE>
 
-TUPLE: legislator title firstname middlename lastname name_suffix nickname party state district
-  in_office gender phone fax website webform email congress_office bioguide_id votesmart_id
-  fec_id govtrack_id crp_id eventful_id sunlight_old_id congresspedia_url twitter_id youtube_url ;
-
-: <legislator> ( hash -- leg )
-  legislator slot-names [ over at ] map { legislator } prepend
-  >tuple nip ;
-
 : get-legislator ( apikey params -- leg )
   "legislators.get" query "legislator" swap at <legislator> ;
 
 : get-legislators ( apikey params -- legs )
-  "legislators.getList" query "legislators" swap at
-  [ "legislator" swap at <legislator> ] map ;
+  "legislators.getList" query extract-legislators ;
 
 : legislators-for-zip ( apikey zip -- legs )
-  "zip" swap 1assoc "legislators.allForZip" query "legislators" swap at
-  [ "legislator" swap at <legislator> ] map ;
-
-TUPLE: district state number ;
-
-: <district> ( hash -- district )
-  district slot-names [ over at ] map { district } prepend
-  >tuple nip ;
+  "zip" swap 1assoc "legislators.allForZip" query extract-legislators ;
 
 : districts-for-zip ( apikey zip -- districts )
   "zip" swap 1assoc "districts.getDistrictsFromZip" query "districts" swap at
