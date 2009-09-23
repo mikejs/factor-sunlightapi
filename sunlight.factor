@@ -4,9 +4,9 @@ USING: kernel json.reader http.client urls locals accessors assocs strings conti
  math.parser make classes.tuple ;
 IN: sunlight
 
-CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
-
 <PRIVATE
+
+CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
 
 : method-url ( method -- url )
   [ sunlight-url clone dup path>> ] dip url-append-path >>path ;
