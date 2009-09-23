@@ -11,11 +11,11 @@ CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
 : method-url ( method -- url )
   [ sunlight-url clone dup path>> ] dip url-append-path >>path ;
 
-:: query-url ( method apikey params -- url )
+:: query-url ( apikey params method -- url )
   method method-url apikey "apikey" set-query-param
   params over [ -rot swap set-query-param drop ] curry assoc-each ;
 
-: query ( method apikey params -- data )
+: query ( apikey params method -- data )
   query-url [ http-get nip >string json> "response" swap at ] [ 2drop { } ] recover ;
 
 : slot-names ( class -- l )
@@ -33,8 +33,8 @@ TUPLE: legislator title firstname middlename lastname name_suffix nickname party
   legislator slot-names [ over at ] map { legislator } prepend
   >tuple nip ;
 
-:: get-legislator ( apikey params -- leg )
-  "legislators.get" apikey params query "legislator" swap at <legislator> ;
+: get-legislator ( apikey params -- leg )
+  "legislators.get" query "legislator" swap at <legislator> ;
 
-:: get-legislators ( apikey params -- legs )
-  "legislators.getList" apikey params query [ <legislator> ] map ;
+: get-legislators ( apikey params -- legs )
+  "legislators.getList" query [ <legislator> ] map ;
