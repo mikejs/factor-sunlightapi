@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Michael Stephens.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel json.reader http.client urls locals accessors assocs strings continuations sequences
- math.parser make classes.tuple ;
+ math.parser make classes.tuple arrays combinators ;
 IN: sunlight
 
 <PRIVATE
@@ -21,6 +21,9 @@ CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
 : slot-names ( class -- l )
   all-slots [ name>> ] map ;
 
+: 1assoc ( key value -- assoc )
+  [ 1array ] bi@ zip ;
+
 PRIVATE>
 
 TUPLE: legislator title firstname middlename lastname name_suffix nickname party state district
@@ -35,4 +38,9 @@ TUPLE: legislator title firstname middlename lastname name_suffix nickname party
   "legislators.get" query "legislator" swap at <legislator> ;
 
 : get-legislators ( apikey params -- legs )
-  "legislators.getList" query [ <legislator> ] map ;
+  "legislators.getList" query "legislators" swap at
+  [ "legislator" swap at <legislator> ] map ;
+
+: legislators-for-zip ( apikey zip -- legs )
+  "zip" swap 1assoc "legislators.allForZip" query "legislators" swap at
+  [ "legislator" swap at <legislator> ] map ;
