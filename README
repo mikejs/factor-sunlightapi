@@ -1,0 +1,17 @@
+A Factor library for querying the Sunlight Labs API (see http://wiki.sunlightlabs.com/Sunlight_API_Documentation)
+
+Example usage:
+
+> USE: sunlight
+> "YOUR_API_KEY" { { "state" "NC" } { "district" 4 } } get-legislator lastname>> print
+Price
+
+> "YOUR_API_KEY" { { "state" "NC" } } get-legislators [ lastname>> print ] each
+Burr
+Butterfield
+etc...
+Watt
+
+> "YOUR_API_KEY" 12180 districts-for-zip [ [ state>> "State: " write write ] [ number>> " Number: " write print ] bi ] each
+State: NY District: 20
+State: NY District: 21
