@@ -44,3 +44,20 @@ TUPLE: legislator title firstname middlename lastname name_suffix nickname party
 : legislators-for-zip ( apikey zip -- legs )
   "zip" swap 1assoc "legislators.allForZip" query "legislators" swap at
   [ "legislator" swap at <legislator> ] map ;
+
+TUPLE: district state number ;
+
+: <district> ( hash -- district )
+  district slot-names [ over at ] map { district } prepend
+  >tuple nip ;
+
+: districts-for-zip ( apikey zip -- districts )
+  "zip" swap 1assoc "districts.getDistrictsFromZip" query "districts" swap at
+  [ "district" swap at <district> ] map ;
+
+: zips-for-district ( apikey state district -- zips )
+  2array { "state" "district" } swap zip "districts.getZipsFromDistrict" query "zips" swap at ;
+
+: district-for-lat-long ( apikey latitude longitude -- zip )
+  2array { "latitude" "longitude" } swap zip "districts.getDistrictFromLatLong" query "districts" swap at
+  first "district" swap at <district> ;
