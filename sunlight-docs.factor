@@ -7,7 +7,7 @@ HELP: get-legislator
   { "legislator/f" "A " { $link legislator } ", or f if no results or more than one matching legislator"} }
 { $description "Use the Sunlight Lakbs API to look up a single legislator."}
 { $examples
- { $example
+ { $unchecked-example
    "USE: sunlight"
    "\"YOUR_API_KEY\" { { \"district\" 4 } { \"state\" \"NC\" } } get-legislator"
    "lastname>> ."
