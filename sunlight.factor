@@ -82,3 +82,6 @@ PRIVATE>
 
 : get-committee ( apikey id -- committee )
   "id" swap 1assoc "committees.get" query extract-committee ;
+
+: committees-for-legislator ( apikey bioguide-id -- committees )
+  "bioguide_id" swap 1assoc "committees.allForLegislator" query extract-committees ;
