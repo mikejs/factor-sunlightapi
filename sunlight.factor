@@ -44,6 +44,14 @@ CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
 : extract-legislators ( hash -- seq )
   "legislators" swap at [ "legislator" swap at <legislator> ] map ;
 
+: extract-committee ( hash -- committee )
+  "committee" swap at <committee>
+  dup subcommittees>> [ "committee" swap at <committee> ] map >>subcommittees
+  dup members>> [ "legislator" swap at <legislator> ] map >>members ;
+
+: extract-committees ( hash -- seq )
+  "committees" swap at [ extract-committee ] map ;
+
 : 1assoc ( key value -- assoc )
   [ 1array ] bi@ zip ;
 
@@ -70,7 +78,7 @@ PRIVATE>
   first "district" swap at <district> ;
 
 : get-committees ( apikey chamber -- committees )
-  "chamber" swap 1assoc "committees.getList" query "committees" swap at
-  [ "committee" swap at
-    "subcommittees" over [ [ "committee" swap at <committee> ] map ] change-at
-    <committee> ] map ;
+  "chamber" swap 1assoc "committees.getList" query extract-committees ;
+
+: get-committee ( apikey id -- committee )
+  "id" swap 1assoc "committees.get" query extract-committee ;
