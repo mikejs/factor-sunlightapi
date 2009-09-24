@@ -53,7 +53,7 @@ CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
   "committees" swap at [ extract-committee ] map ;
 
 : 1assoc ( key value -- assoc )
-  [ 1array ] bi@ zip ;
+  2array 1array ;
 
 PRIVATE>
 
