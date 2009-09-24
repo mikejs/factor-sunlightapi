@@ -57,7 +57,7 @@ CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
 
 PRIVATE>
 
-: get-legislator ( apikey params -- leg )
+: get-legislator ( apikey params -- legislator/f )
   "legislators.get" query "legislator" swap at <legislator> ;
 
 : get-legislators ( apikey params -- legs )
@@ -80,7 +80,7 @@ PRIVATE>
 : get-committees ( apikey chamber -- committees )
   "chamber" swap 1assoc "committees.getList" query extract-committees ;
 
-: get-committee ( apikey id -- committee )
+: get-committee ( apikey id -- committee/f )
   "id" swap 1assoc "committees.get" query extract-committee ;
 
 : committees-for-legislator ( apikey bioguide-id -- committees )
