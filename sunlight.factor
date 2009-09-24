@@ -10,6 +10,8 @@ TUPLE: legislator title firstname middlename lastname name_suffix nickname party
 
 TUPLE: district state number ;
 
+TUPLE: committee chamber id name subcommittees members ;
+
 <PRIVATE
 
 CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
@@ -33,6 +35,10 @@ CONSTANT: sunlight-url URL"  http://services.sunlightlabs.com/api/"
 
 : <district> ( hash -- district )
   district slot-names [ over at ] map { district } prepend
+  >tuple nip ;
+
+: <committee> ( hash -- committee )
+  committee slot-names [ over at ] map { committee } prepend
   >tuple nip ;
 
 : extract-legislators ( hash -- seq )
@@ -62,3 +68,9 @@ PRIVATE>
 : district-for-lat-long ( apikey latitude longitude -- zip )
   2array { "latitude" "longitude" } swap zip "districts.getDistrictFromLatLong" query "districts" swap at
   first "district" swap at <district> ;
+
+: get-committees ( apikey chamber -- committees )
+  "chamber" swap 1assoc "committees.getList" query "committees" swap at
+  [ "committee" swap at
+    "subcommittees" over [ [ "committee" swap at <committee> ] map ] change-at
+    <committee> ] map ;
