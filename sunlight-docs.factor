@@ -22,7 +22,7 @@ HELP: get-legislators
 { $description "Use the Sunlight Labs API to look up all legislators matching a certain set of parameters" } ;
 
 ARTICLE: "sunlight" "Sunlight Labs API"
-"Query US legislative information with the Sunlight Labs API"
-{ $url "google.com" } ;
+"Query US legislative information with the Sunlight Labs API "
+{ $url "http://wiki.sunlightlabs.com/Sunlight_API_Documentation" } ;
 
 ABOUT: "sunlight"
